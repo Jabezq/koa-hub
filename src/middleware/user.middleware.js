@@ -1,7 +1,8 @@
 const errorTypes = require('../constant/error-types');
 const server = require('../server/user.server');
+const cryptoPassword = require('../utils/crypto-password');
 
-async function verifyUser(ctx, next) {
+const verifyUser = async (ctx, next) => {
   const { username, password } = ctx.request.body;
 
   // 检查是否为空
@@ -22,6 +23,16 @@ async function verifyUser(ctx, next) {
   await next();
 }
 
+const md5Password = async (ctx, next) => {
+  const { password } = ctx.request.body;
+
+  const hash = cryptoPassword(password);
+  ctx.request.body.password = hash;
+
+  await next();
+}
+
 module.exports = {
-  verifyUser
+  verifyUser,
+  md5Password
 }
