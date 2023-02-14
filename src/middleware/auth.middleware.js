@@ -30,6 +30,8 @@ const verifyLogin = async (ctx, next) => {
     return ctx.app.emit('error', error, ctx);
   }
 
+  ctx.request.body = user;
+  
   await next();
 }
 

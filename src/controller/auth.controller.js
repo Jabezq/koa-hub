@@ -1,6 +1,23 @@
+const jwt = require('jsonwebtoken');
+const { SECRET_KEY } = require('../app/config');
+
 class AuthController {
   async login(ctx, next) {
-    ctx.body = 'login';
+    const { id, username } = ctx.request.body;
+    const userInfo = {
+      id,
+      username
+    }
+
+    const token = jwt.sign(userInfo, SECRET_KEY, {
+      expiresIn: '24h'
+    });
+
+    ctx.body = {
+      id,
+      username,
+      token
+    };
   }
 }
 
