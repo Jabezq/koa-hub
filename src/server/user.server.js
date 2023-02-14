@@ -11,7 +11,7 @@ class UserServer {
     return result[0];
   }
 
-  async query(username) {
+  async queryByUsername(username) {
     const statement = `SELECT * FROM users WHERE username = ?;`;
 
     const result = await pool.execute(statement, [username]);

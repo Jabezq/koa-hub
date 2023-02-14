@@ -1,6 +1,6 @@
 const errorTypes = require('../constant/error-types');
 
-function errorHandle(err, ctx) {
+const errorHandle = (err, ctx) => {
   let status, message;
 
   switch (err.message) {

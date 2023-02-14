@@ -1,5 +1,5 @@
 const errorTypes = require('../constant/error-types');
-const server = require('../server/auth.server');
+const server = require('../server/user.server');
 const cryptoPassword = require('../utils/crypto-password');
 
 const verifyLogin = async (ctx, next) => {
@@ -13,7 +13,7 @@ const verifyLogin = async (ctx, next) => {
   }
 
   // 检查用户名是否存在
-  const result = await server.getByUsername(username);
+  const result = await server.queryByUsername(username);
   const user = result[0];
 
   if (!user) {

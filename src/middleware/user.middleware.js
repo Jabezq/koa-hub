@@ -13,7 +13,7 @@ const verifyUser = async (ctx, next) => {
   }
 
   // 检查用户名是否存在
-  const result = await server.query(username);
+  const result = await server.queryByUsername(username);
   if (result.length) {
     const error = new Error(errorTypes.USER_ALREADY_EXISTS);
 
