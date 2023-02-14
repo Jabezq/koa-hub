@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require('../app/config');
 const errorTypes = require('../constant/error-types');
 const server = require('../server/user.server');
+const emitError = require('../utils/error-emit');
 const cryptoPassword = require('../utils/crypto-password');
 
 const verifyLogin = async (ctx, next) => {
@@ -10,9 +11,7 @@ const verifyLogin = async (ctx, next) => {
 
   // 检查用户名和密码是否为空
   if (!username || !password || username === '' || password === '') {
-    const error = new Error(errorTypes.NAME_OR_PASSWORD_IS_REQUIRED);
-
-    return ctx.app.emit('error', error, ctx);
+    return emitError(errorTypes.NAME_OR_PASSWORD_IS_REQUIRED, ctx);
   }
 
   // 检查用户名是否存在
@@ -20,17 +19,13 @@ const verifyLogin = async (ctx, next) => {
   const user = result[0];
 
   if (!user) {
-    const error = new Error(errorTypes.USER_DOES_NOT_EXISTS);
-
-    return ctx.app.emit('error', error, ctx);
+    return emitError(errorTypes.USER_DOES_NOT_EXISTS, ctx);
   }
 
   // 检查密码是否正确
   const md5Password = cryptoPassword(password);
   if (md5Password !== user.password) {
-    const error = new Error(errorTypes.PASSWORD_IS_INCORRECT);
-
-    return ctx.app.emit('error', error, ctx);
+    return emitError(errorTypes.PASSWORD_IS_INCORRECT, ctx);
   }
 
   ctx.request.body = user;
@@ -55,9 +50,7 @@ const verifyAuth = async (ctx, next) => {
 
     await next();
   } catch {
-    const error = new Error(errorTypes.UNANTHORIZED);
-
-    return ctx.app.emit('error', error, ctx);
+    return emitError(errorTypes.UNANTHORIZED, ctx);
   }
 }
 
