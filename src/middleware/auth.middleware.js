@@ -40,6 +40,9 @@ const verifyAuth = async (ctx, next) => {
   console.log('--- auth.middleware/verify token ---');
 
   const result = ctx.headers.authorization;
+  if (!result) {
+    return emitError(errorTypes.UNANTHORIZED, ctx);
+  }
   const token = result.replace('Bearer ', '');
 
   try {
