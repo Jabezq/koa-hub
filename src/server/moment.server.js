@@ -8,6 +8,49 @@ class MomentServer {
 
     return result;
   }
+
+  async getMomentDetail(moment_id) {
+    const statement = `
+      SELECT 
+        m.id id, m.content content, m.createAt createTime, m.updateAt updateTime,
+        JSON_OBJECT('id', u.id, 'name', u.username) author 
+      FROM 
+        moment m 
+      LEFT JOIN 
+        user u 
+      ON 
+        m.user_id = u.id
+      WHERE
+        m.id = ?;
+    `;
+
+    const [result] = await pool.execute(statement, [moment_id]);
+
+    return result[0];
+  }
+
+  async getMomentList(pageNo, pageSize) {
+    var pageNo = String((pageNo - 1) * pageSize);
+
+    const statement = `
+      SELECT 
+        m.id id, m.content content, m.createAt createTime, m.updateAt updateTime,
+        JSON_OBJECT('id', u.id, 'name', u.username) author 
+      FROM 
+        moment m 
+      LEFT JOIN 
+        user u 
+      ON 
+        m.user_id = u.id 
+      LIMIT 
+        ?, ?;
+    `;
+    
+    // LIMIT的分页占位符必须是字符串类型
+    const [result] = await pool.execute(statement, [pageNo, pageSize]);
+
+    return result;
+  }
 }
 
 module.exports = new MomentServer();
