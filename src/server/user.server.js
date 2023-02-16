@@ -4,7 +4,7 @@ class UserServer {
   async register(info) {
     const { username, password } = info;
 
-    const statement = `INSERT INTO users (username, password) VALUES (? , ?);`;
+    const statement = `INSERT INTO user (username, password) VALUES (? , ?);`;
 
     const result = await pool.execute(statement, [username, password]);
 
@@ -12,7 +12,7 @@ class UserServer {
   }
 
   async queryByUsername(username) {
-    const statement = `SELECT * FROM users WHERE username = ?;`;
+    const statement = `SELECT * FROM user WHERE username = ?;`;
 
     const result = await pool.execute(statement, [username]);
 
