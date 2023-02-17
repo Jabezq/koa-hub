@@ -66,6 +66,16 @@ class MomentServer {
 
     return result;
   }
+
+  async removeMoment(moment_id) {
+    const statement = `
+      DELETE FROM moment WHERE id = ?;
+    `;
+
+    const result = await pool.execute(statement, [moment_id]);
+
+    return result;
+  }
 }
 
 module.exports = new MomentServer();

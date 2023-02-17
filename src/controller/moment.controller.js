@@ -34,6 +34,14 @@ class MomentController {
     
     ctx.body = result;
   }
+
+  async remove(ctx, next) {
+    const moment_id = ctx.params.momentId;
+
+    const result = await server.removeMoment(moment_id);
+
+    ctx.body = result;
+  }
 }
 
 module.exports = new MomentController();
