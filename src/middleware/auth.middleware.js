@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require('../app/config');
 const errorTypes = require('../constant/error-types');
 const server = require('../server/user.server');
+const authServer = require('../server/auth.server');
 const emitError = require('../utils/error-emit');
 const cryptoPassword = require('../utils/crypto-password');
 
@@ -57,7 +58,22 @@ const verifyAuth = async (ctx, next) => {
   }
 }
 
+/**
+ * 验证操作权限中间件
+ */
+const verifyPermission = async (ctx, next) => {
+  console.log('--- auth.middleware/verify permission ---');
+
+  const id = ctx.user.id;
+  const moment_id = ctx.params.momentId;
+
+  const isPermission = await authServer.getPermission(id, moment_id);
+
+  return isPermission ? await next() : emitError(errorTypes.UNPERMISSION, ctx);
+}
+
 module.exports = {
   verifyLogin,
-  verifyAuth
+  verifyAuth,
+  verifyPermission
 }

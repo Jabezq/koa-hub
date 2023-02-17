@@ -51,6 +51,21 @@ class MomentServer {
 
     return result;
   }
+
+  async updateMoment(moment_id, content) {
+    const statement = `
+      UPDATE 
+        moment 
+      SET 
+        content = ? 
+      WHERE 
+        id = ?;
+    `;
+
+    const [result] = await pool.execute(statement, [content, moment_id]);
+
+    return result;
+  }
 }
 
 module.exports = new MomentServer();
