@@ -6,7 +6,15 @@ const errorHandler = require('./error-handle');
 
 const app = new Koa();
 
-app.use(koaBody());
+app.use(koaBody({
+  multipart: true,
+  formidable: {
+    // 指定文件上传的保存目录
+    uploadDir: './uploads',
+    // 保留文件的扩展名
+    keepExtensions: true,
+  }
+}));
 
 // 动态挂载路由
 autoRequireRouter(app);
